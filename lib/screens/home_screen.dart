@@ -44,80 +44,85 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Weather',),
         centerTitle: true,
       ), */
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(left: 20,right: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              buildDateHeader(),
-              SizedBox(height: 10,),
-              Container(
-                child: TextField(
-                  controller: _cityName,
-                  decoration: InputDecoration(
-                    hintText: 'Nhập tên thành phố',
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+      body: Container(
+        decoration: BoxDecoration(
 
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(left: 20,right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                buildDateHeader(),
+                SizedBox(height: 10,),
+                Container(
+                  child: TextField(
+                    controller: _cityName,
+                    decoration: InputDecoration(
+                      hintText: 'Nhập tên thành phố',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+        
+                      ),
+                      suffixIcon: IconButton(onPressed: _seach, icon: Icon(Icons.search))
                     ),
-                    suffixIcon: IconButton(onPressed: _seach, icon: Icon(Icons.search))
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Expanded(
-                child: FutureBuilder<Weather>(
-                    future: _futureWeather, 
-                    builder: (context,snapshot){
-                      if(snapshot.connectionState == ConnectionState.waiting){
-                        return CircularProgressIndicator();
-                      }
-                      if(snapshot.hasError){
-                        return Text('Error: ${snapshot.error}');
-                      }
-                      if(!snapshot.hasData){
-                        return Text('No data');
-                      }
-                      final weather = snapshot.data!;
-                      return Column(
-                        children: [
-                          Container(
-                            height: 180,
-                            decoration: BoxDecoration(
-                              color: Colors.blue[200],
-                              borderRadius: BorderRadius.circular(30)
+                SizedBox(height: 20),
+                Expanded(
+                  child: FutureBuilder<Weather>(
+                      future: _futureWeather, 
+                      builder: (context,snapshot){
+                        if(snapshot.connectionState == ConnectionState.waiting){
+                          return CircularProgressIndicator();
+                        }
+                        if(snapshot.hasError){
+                          return Text('Error: ${snapshot.error}');
+                        }
+                        if(!snapshot.hasData){
+                          return Text('No data');
+                        }
+                        final weather = snapshot.data!;
+                        return Column(
+                          children: [
+                            Container(
+                              height: 180,
+                              decoration: BoxDecoration(
+                                color: Colors.blue[200],
+                                borderRadius: BorderRadius.circular(30)
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    weather.cityName,
+                                    style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 8,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${weather.temp} °C',
+                                        style: TextStyle(fontSize: 40),
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Image.network('https://openweathermap.org/img/wn/${weather.icon}@2x.png')
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  weather.cityName,
-                                  style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${weather.temp} °C',
-                                      style: TextStyle(fontSize: 40),
-                                    ),
-                                    SizedBox(width: 10,),
-                                    Image.network('https://openweathermap.org/img/wn/${weather.icon}@2x.png')
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-                  ),
-                )
-            ],
+                          ],
+                        );
+                      }
+                    ),
+                  )
+              ],
+            ),
           ),
         ),
       )

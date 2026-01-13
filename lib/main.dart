@@ -11,7 +11,9 @@ void main() async{
  */
 import 'package:app_weather/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-void main(){
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+Future<void> main()async{
+  await dotenv.load(fileName: '.env');
   runApp(MyApp());
 }
 class MyApp extends StatelessWidget {
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        
+
       home: HomeScreen(),
     );
   }
