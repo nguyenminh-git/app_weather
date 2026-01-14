@@ -9,7 +9,7 @@ void main() async{
   print('temp:${weatherData.temp}C');
 }
  */
-import 'package:app_weather/screens/home_screen.dart';
+import 'package:app_weather/screens/intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -24,6 +24,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeScreen());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: IntroScreen());
   }
 }

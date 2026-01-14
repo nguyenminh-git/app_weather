@@ -4,7 +4,8 @@ import 'package:app_weather/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Weather? initialWeather;
+  const HomeScreen({super.key,this.initialWeather});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -12,16 +13,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _cityName = TextEditingController(text: 'hanoi');
-  final _weather = WeatherService();
+  final _weather= WeatherService();
   Future<Weather>? _futureWeather;
 
   @override
+  @override
   void initState() {
     super.initState();
-    _futureWeather = _weather.fechWeather(_cityName.text.trim());
+    if (widget.initialWeather != null) {
+      _futureWeather = Future.value(widget.initialWeather);
+    } else {
+      _futureWeather = _weather.fechWeather(_cityName.text.trim());
+    }
   }
 
-  void _seach() {
+
+ /*  void _seach() {
     final city = _cityName.text.trim();
     if (city.isEmpty) {
       ScaffoldMessenger.of(
@@ -32,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _futureWeather = _weather.fechWeather(city);
     });
-  }
+  } */
 
   @override
   void dispose() {
