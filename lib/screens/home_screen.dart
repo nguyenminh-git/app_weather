@@ -1,11 +1,10 @@
-import 'package:app_weather/models/weather.dart';
-import 'package:app_weather/services/weather_service.dart';
+import 'package:app_weather/provider/weather_provider.dart';
 import 'package:app_weather/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  final Weather? initialWeather;
-  const HomeScreen({super.key,this.initialWeather});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -13,10 +12,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _cityName = TextEditingController(text: 'hanoi');
-  final _weather= WeatherService();
-  Future<Weather>? _futureWeather;
 
-  @override
+  /* @override
   @override
   void initState() {
     super.initState();
@@ -25,21 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       _futureWeather = _weather.fechWeather(_cityName.text.trim());
     }
-  }
+  } */
 
-
- /*  void _seach() {
+  void _seach() {
     final city = _cityName.text.trim();
     if (city.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('nhap ten thanh pho')));
-      return;
+      context.read<WeatherProvider>().fectWeatherData(city);
     }
-    setState(() {
-      _futureWeather = _weather.fechWeather(city);
-    });
-  } */
+  }
 
   @override
   void dispose() {
@@ -49,29 +39,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      /* appBar: AppBar(
-        title: Text('Weather',),
-        centerTitle: true,
-      ), */
-      body: FutureBuilder<Weather>(
-        future: _futureWeather,
-        builder: (context, snapshot) {
-          bool isNight = false;
-          if (snapshot.hasData) {
-            isNight = snapshot.data!.icon.endsWith('n');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          }
-          if (snapshot.hasError) {
-            return Text('error: ${snapshot.error}');
-          }
-          if (!snapshot.hasData) {
-            return Text('No data');
-          }
-          final weather = snapshot.data!;
-          return Container(
+    return Consumer<WeatherProvider>(
+      builder: (context, provider, child) {
+        if (provider.isLoading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (provider.error.isNotEmpty) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('error: ${provider.error}'),
+                  ElevatedButton(onPressed: () {}, child: const Text('retry')),
+                ],
+              ),
+            ),
+          );
+        }
+        final weather = provider.weather!;
+        final isNight = provider.isNight;
+        return Scaffold(
+          body: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.bottomRight,
@@ -115,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
-                              color: isNight? Colors.white:Colors.black
+                              color: isNight ? Colors.white : Colors.black,
                             ),
                           ),
                           //const SizedBox(height: 8),
@@ -126,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 '${weather.temp} °C',
                                 style: TextStyle(
                                   fontSize: 40,
-                                  color: isNight? Colors.white:Colors.black
+                                  color: isNight ? Colors.white : Colors.black,
                                 ),
                               ),
                               SizedBox(width: 10),
@@ -142,9 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

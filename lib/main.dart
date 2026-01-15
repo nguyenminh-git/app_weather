@@ -9,14 +9,21 @@ void main() async{
   print('temp:${weatherData.temp}C');
 }
  */
+import 'package:app_weather/provider/weather_provider.dart';
 import 'package:app_weather/screens/intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context)=>WeatherProvider(),
+      child: const MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
