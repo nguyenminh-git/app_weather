@@ -7,7 +7,8 @@ import 'dart:convert';
 class WeatherService {
   final String api_key= dotenv.env['api_key']!;
   Future<Weather> fetchWeather(String cityName) async{
-    final url = Uri.parse('https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=$api_key&units=metric&lang=vi');
+    final encodedUrl = Uri.encodeFull('https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=$api_key&units=metric&lang=vi');
+    final url = Uri.parse(encodedUrl);
     final response = await http.get(url); //response: phan hoi
     if(response.statusCode ==200){
       final data = jsonDecode(response.body);
@@ -17,7 +18,8 @@ class WeatherService {
     }
   }
   Future<List<ForeCastItem>> fetchForeCast5Day(String cityName) async{
-    final url = Uri.parse('https://api.openweathermap.org/data/2.5/forecast?q=$cityName&appid=$api_key&units=metric&lang=vi');
+    final encodedUrl = Uri.encodeFull('https://api.openweathermap.org/data/2.5/forecast?q=$cityName&appid=$api_key&units=metric&lang=vi');
+    final url = Uri.parse(encodedUrl);
     final res = await http.get(url);
     if(res.statusCode!=200){
       throw Exception('Forecast error: ${res.body}');

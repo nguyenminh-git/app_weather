@@ -1,3 +1,0 @@
-- [x] Tạo file lib/screens/intro_screen.dart với màn hình giới thiệu sử dụng gradient màu từ home_screen.dart
-- [x] Chỉnh sửa lib/main.dart để đặt IntroScreen làm màn hình chính
-- [x] Thêm logic điều hướng tự động từ IntroScreen sang HomeScreen sau 3 giây hoặc khi nhấn

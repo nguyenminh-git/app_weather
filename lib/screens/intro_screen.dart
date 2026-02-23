@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:app_weather/provider/weather_provider.dart';
 import 'package:app_weather/screens/home_screen.dart';
+//import 'package:app_weather/services/weather_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,12 +24,15 @@ class _IntroScreenState extends State<IntroScreen> {
   Future<void> _start() async {
     final weatherProvider = Provider.of<WeatherProvider>(context,listen: false);
     try {
-      // chạy song song: fetch data + chờ 3s
-      await Future.wait([
-        weatherProvider.fectWeatherData('hanoi'),
-        Future.delayed(const Duration(seconds: 3)),
-      ]);
-
+      await weatherProvider.fetchWeatherByCurrentLocation();
+    } catch (e) {
+      // Nếu bật vị trí lỗi, hoặc quyền bị từ chối, lấy mặc định Hà Nội
+      try {
+        await weatherProvider.fetchWeatherData('hanoi');
+      } catch (_) {}
+    }
+    
+    try {
       if (!mounted) return;
  
       Navigator.of(context).pushReplacement(

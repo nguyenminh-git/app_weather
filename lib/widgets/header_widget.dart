@@ -50,7 +50,7 @@ Widget buildDateHeader(bool isNight) {
 
 String _formatDate(DateTime date) {
   // VD: SATURDAY 19 MARCH 2016
-  return '${_weekday(date.weekday)} ${date.day} ${_month(date.month)} ${date.year}';
+  return '${_weekday(date.weekday)} ${date.day}, ${_month(date.month)} ${date.year}';
 }
 
 String _weekday(int d) => const [
