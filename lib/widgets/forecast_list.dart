@@ -6,7 +6,7 @@ class ForecastList extends StatelessWidget {
   final List<ForeCastItem> forecast;
   final bool isNight;
   // 1. Thêm callback để báo cho màn hình cha biết ngày nào được nhấn
-  final Function(DateTime) onDaySelected; 
+  final Function(DateTime) onDaySelected;
 
   const ForecastList({
     super.key,
@@ -20,8 +20,9 @@ class ForecastList extends StatelessWidget {
     final textColor = isNight ? Colors.white : Colors.black87;
 
     return ListView.separated(
+      shrinkWrap: true,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      physics: const BouncingScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       // Giữ nguyên logic bỏ qua ngày đầu tiên (Today) của bạn
       itemCount: forecast.length > 1 ? forecast.length - 1 : 0,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
@@ -43,8 +44,14 @@ class ForecastList extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: isNight
-                        ? [Colors.white.withOpacity(0.15), Colors.white.withOpacity(0.05)]
-                        : [Colors.white.withOpacity(0.6), Colors.white.withOpacity(0.3)],
+                        ? [
+                            Colors.white.withOpacity(0.15),
+                            Colors.white.withOpacity(0.05),
+                          ]
+                        : [
+                            Colors.white.withOpacity(0.6),
+                            Colors.white.withOpacity(0.3),
+                          ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -58,7 +65,7 @@ class ForecastList extends StatelessWidget {
                       color: Colors.black.withOpacity(0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
-                    )
+                    ),
                   ],
                 ),
                 child: Row(
@@ -125,10 +132,20 @@ class ForecastList extends StatelessWidget {
 
   String _getDisplayDay(DateTime date) {
     final now = DateTime.now();
-    if (date.year == now.year && date.month == now.month && date.day == now.day) {
+    if (date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day) {
       return 'Today';
     }
-    const names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const names = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
     return names[date.weekday - 1];
   }
 }

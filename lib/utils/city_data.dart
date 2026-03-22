@@ -71,7 +71,7 @@ class CityData {
       return const [];
     }
     
-    // Loại bỏ dấu đi (trong thực tế có thể dùng thư viện remove_diacritics hoặc tự viết extension)
+    // Loại bỏ dấu đi 
     // Ở đây danh sách đang được lưu thành ASCII (không dấu) để tra cứu dễ nhất.
     final lowercaseQuery = query.toLowerCase();
     
